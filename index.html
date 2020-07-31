@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<meta name='viewport' content='width=device-width, initial-scale=1.0' />
+<title>UNIX epoch converter</title>
+
+<script>
+    
+    function byid(id) { return document.getElementById(id); }
+    
+    function eponinput(vin) {
+        const x = new XMLHttpRequest();
+        x.open('GET', 'server.php?' + 'epoch=' + vin);
+        
+        x.onloadend = function() {
+            const j = JSON.parse(this.responseText);
+            byid('res').innerHTML = j['r'];
+            byid('epout').value =   j['epoch'];
+        }
+        
+        x.send();
+    }
+    
+    function setNow() {
+        const now = parseInt(Math.floor(new Date().getTime() / 1000));
+        byid('epoch').value = now;
+        eponinput(now);       
+    }
+    
+    window.onload = setNow;
+    
+
+</script>
+
+
+<style>
+    body     { font-family: monospace }
+    .theepin { width: 17ex }
+    #res     { margin-top: 0.5ex }
+</style>
+
+
+    
+
+</head>
+<body>
+    <div>
+        <div><input type='number' min='0' max='9596158792' pattern='^\d+\.?\d*' id='epoch' class='theepin' oninput='eponinput(this.value);'/>
+            <button onclick='setNow();'>now</button></div>
+        <div><input type='number' id='epout'  class='theepin' disabled='disabled' /></div>
+    </div>
+    <div id='res'>
+    </div>
+    
+</body>
+</html>
