@@ -10,12 +10,16 @@
     function byid(id) { return document.getElementById(id); }
     
     function eponinput(vin) {
-
-        const s = new Date(vin * 1000).toString();
-
-        byid('res').innerHTML =   s;
-        byid('epout').value =   vin;
-
+        const x = new XMLHttpRequest();
+        x.open('GET', 'server.php?' + 'epoch=' + vin);
+        
+        x.onloadend = function() {
+            const j = JSON.parse(this.responseText);
+            byid('res').innerHTML = j['r'];
+            byid('epout').value =   j['epoch'];
+        }
+        
+        x.send();
     }
     
     function setNow() {
